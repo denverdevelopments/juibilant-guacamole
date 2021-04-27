@@ -1,29 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe 'the plots index page' do
+  before(:each) do
+    @garden_1 = Garden.create!(name: 'Turing Community Garden', organic: true)
+    @garden_2 = Garden.create!(name: 'My Backyard', organic: false)
+
+    @plot_1 = @garden_1.plots.create!(number: 1, size: 'Small', direction: "East")
+    @plot_2 = @garden_1.plots.create!(number: 22, size: 'Large', direction: "West")
+    @plot_3 = @garden_2.plots.create!(number: 4, size: 'Medium', direction: "Southwest")
+    # @plot_4 = @garden_2.plots.create!(number: 333, size: 'Small', direction: "South")
+
+    @plant_1 = Plant.create!(name: 'Lily', description: "White flower", days_to_harvest: 21)
+    @plant_2 = Plant.create!(name: 'Daisy', description: "Small red petals", days_to_harvest: 13)
+    @plant_3 = Plant.create!(name: 'Rose', description: "Many thorny stems", days_to_harvest: 110)
+    @plant_4 = Plant.create!(name: 'Cactus', description: "Prickly, not much water", days_to_harvest: 45)
+    @plant_5 = Plant.create!(name: 'Lemon Tree', description: "Small tree, will bear fruit", days_to_harvest: 212)
+    @plant_6 = Plant.create!(name: 'Fern', description: "Ground cover", days_to_harvest: 8)
+
+    PlantPlot.create!(plant: @plant_1, plot: @plot_1)
+    PlantPlot.create!(plant: @plant_2, plot: @plot_1)
+    PlantPlot.create!(plant: @plant_3, plot: @plot_1)
+    PlantPlot.create!(plant: @plant_4, plot: @plot_2)
+    PlantPlot.create!(plant: @plant_5, plot: @plot_3)
+    PlantPlot.create!(plant: @plant_6, plot: @plot_3)
+  end
+
   it 'lists all the plot numbers with plot plants' do
-    shelter = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
-    pet_1 = Pet.create(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: shelter.id)
-    pet_2 = Pet.create(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter.id)
+      visit "/gardens/#{garden_1.id}/plots"
 
-    visit "/pets"
+    within("#plots_list") do
+      within("#plot-#{plot_1.id}") do
+        expect(page).to have_content("#{plot_1.number}")
+        expect(page).to have_content("#{dish1.name}")
+      end
 
-    expect(page).to have_content(pet_1.name)    expect(page).to have_content(pet_1.breed)
-    expect(page).to have_content(pet_1.age)
-    expect(page).to have_content(shelter.name)
-
-    expect(page).to have_content(pet_2.name)
-    expect(page).to have_content(pet_2.breed)
-    expect(page).to have_content(pet_2.age)
-    expect(page).to have_content(shelter.name)
+      within("#dish-#{dish2.id}") do
+        expect(page).to have_content("#{dish2.name}")
+        expect(page).to have_content("#{dish2.description}")
+      end
+    end
   end
 
   it 'displays a link to edit each pet' do
-    shelter = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
-    pet_1 = Pet.create(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: shelter.id)
-    pet_2 = Pet.create(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter.id)
-
-    visit '/pets'
+      visit '/pets'
 
     expect(page).to have_content("Edit #{pet_1.name}")
     expect(page).to have_content("Edit #{pet_2.name}")
@@ -34,21 +53,13 @@ RSpec.describe 'the plots index page' do
   end
 
 #   it 'only lists adoptable pets' do
-#     shelter = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
-#     pet_1 = Pet.create(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: shelter.id)
-#     pet_2 = Pet.create(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter.id)
-#     pet_3 = Pet.create(adoptable: false, age: 2, breed: 'saint bernard', name: 'Beethoven', shelter_id: shelter.id)
-#
 #     visit "/pets"
 #
 #     expect(page).to_not have_content(pet_3.name)
 #   end
 #
 #   it 'displays a link to delete each pet' do
-#     shelter = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
-#     pet_1 = Pet.create(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: shelter.id)
-#     pet_2 = Pet.create(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter.id)
-#
+
 #     visit '/pets'
 #
 #     expect(page).to have_content("Delete #{pet_1.name}")
@@ -66,11 +77,6 @@ RSpec.describe 'the plots index page' do
 #   end
 #
 #   it 'lists partial matches as search results' do
-#     shelter = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
-#     pet_1 = Pet.create(adoptable: true, age: 7, breed: 'sphynx', name: 'Bare-y Manilow', shelter_id: shelter.id)
-#     pet_2 = Pet.create(adoptable: true, age: 3, breed: 'domestic pig', name: 'Babe', shelter_id: shelter.id)
-#     pet_3 = Pet.create(adoptable: true, age: 4, breed: 'chihuahua', name: 'Elle', shelter_id: shelter.id)
-#
 #     visit "/pets"
 #
 #     fill_in 'Search', with: "Ba"
