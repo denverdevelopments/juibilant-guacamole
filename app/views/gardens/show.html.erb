@@ -1,0 +1,10 @@
+<section id="garden_show">
+
+  <h2><%= @garden.name %></h2><br/>
+  <h3>Is organic?:&emsp;<%= @garden.organic %></h3><br/>
+
+  <% @plants.each do |plant| %>
+      <p>&emsp;<%= plant.name %></p>
+  <% end %>
+
+</section>
