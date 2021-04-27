@@ -5,5 +5,3 @@ class PlantPlotsController < ApplicationController
     redirect_to '/plots'
    end
 end
-
-# plant_plot = PlantPlot.find_by(plant_id: params[:plant_id], plot_id: params[:format])
