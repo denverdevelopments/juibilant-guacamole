@@ -1,0 +1,14 @@
+<section id="plots_list">
+<h1> Plots Index </h1>
+
+  <% @plots.each do |plot| %>
+    <section id="plot-<%= plot.id %>">
+      <h3>Plot # <%= plot.number %>&emsp;-- has these plants:</h3>
+      <% plot.plants.each do |plant| %>
+        <p><%= plant.name %></p>
+        <%= button_to "Remove #{plant.name}", "/plots/#{plot.id}/plants/#{plant.id}", method: :delete %><br>
+      <% end %><br>
+    </section>
+  <% end %>
+
+</section>

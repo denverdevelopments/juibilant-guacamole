@@ -4,7 +4,7 @@ class PlotsController < ApplicationController
   end
 
   def show
-    @pet = Pet.find(params[:id])
+    @pet = Plot.find(params[:id])
   end
 
 end

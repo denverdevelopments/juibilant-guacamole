@@ -26,7 +26,8 @@ RSpec.describe 'the plots index page' do
   end
 
   it 'shows all the plot numbers with plot plants, and remove plant links' do
-      visit "/gardens/#{@garden_1.id}/plots"
+      visit "/plots"
+      expect(page).to have_content("Plots Index")
 
     within("#plots_list") do
       within("#plot-#{@plot_1.id}") do
