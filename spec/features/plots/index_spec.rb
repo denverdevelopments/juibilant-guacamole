@@ -8,7 +8,7 @@ RSpec.describe 'the plots index page' do
     @plot_1 = @garden_1.plots.create!(number: 1, size: 'Small', direction: "East")
     @plot_2 = @garden_1.plots.create!(number: 22, size: 'Large', direction: "West")
     @plot_3 = @garden_2.plots.create!(number: 4, size: 'Medium', direction: "Southwest")
-    # @plot_4 = @garden_2.plots.create!(number: 333, size: 'Small', direction: "South")
+    @plot_4 = @garden_2.plots.create!(number: 333, size: 'Small', direction: "South")
 
     @plant_1 = Plant.create!(name: 'Lily', description: "White flower", days_to_harvest: 21)
     @plant_2 = Plant.create!(name: 'Daisy', description: "Small red petals", days_to_harvest: 13)
@@ -25,32 +25,46 @@ RSpec.describe 'the plots index page' do
     PlantPlot.create!(plant: @plant_6, plot: @plot_3)
   end
 
-  it 'lists all the plot numbers with plot plants' do
-      visit "/gardens/#{garden_1.id}/plots"
+  it 'shows all the plot numbers with plot plants, and remove plant links' do
+      visit "/gardens/#{@garden_1.id}/plots"
 
     within("#plots_list") do
-      within("#plot-#{plot_1.id}") do
-        expect(page).to have_content("#{plot_1.number}")
-        expect(page).to have_content("#{dish1.name}")
+      within("#plot-#{@plot_1.id}") do
+        expect(page).to have_content("#{@plot_1.number}")
+        expect(page).to have_content("#{@plant_1.name}")
+        expect(page).to have_link("Remove #{@plant_1.name}")
+        expect(page).to have_content("#{@plant_2.name}")
+        expect(page).to have_link("Remove #{@plant_2.name}")
+        expect(page).to have_content("#{@plant_3.name}")
+        expect(page).to have_link("Remove #{@plant_3.name}")
       end
 
-      within("#dish-#{dish2.id}") do
-        expect(page).to have_content("#{dish2.name}")
-        expect(page).to have_content("#{dish2.description}")
+      within("#plot-#{@plot_2.id}") do
+        expect(page).to have_content("#{@plot_2.number}")
+        expect(page).to have_content("#{@plant_4.name}")
+        expect(page).to have_link("Remove #{@plant_4.name}")
+      end
+
+      within("#plot-#{@plot_3.id}") do
+        expect(page).to have_content("#{@plot_3.number}")
+        expect(page).to have_content("#{@plant_5.name}")
+        expect(page).to have_link("Remove #{@plant_5.name}")
+        expect(page).to have_content("#{@plant_6.name}")
+        expect(page).to have_link("Remove #{@plant_6.name}")
       end
     end
   end
 
-  it 'displays a link to edit each pet' do
-      visit '/pets'
-
-    expect(page).to have_content("Edit #{pet_1.name}")
-    expect(page).to have_content("Edit #{pet_2.name}")
-
-    click_link("Edit #{pet_1.name}")
-
-    expect(page).to have_current_path("/pets/#{pet_1.id}/edit")
-  end
+  # it 'has a link to remove a plant from a plot' do
+  #     visit "/gardens/#{@garden_1.id}/plots"
+  #
+  #   expect(page).to have_content("Edit #{pet_1.name}")
+  #   expect(page).to have_content("Edit #{pet_2.name}")
+  #
+  #   click_link("Edit #{pet_1.name}")
+  #
+  #   expect(page).to have_current_path("/pets/#{pet_1.id}/edit")
+  # end
 
 #   it 'only lists adoptable pets' do
 #     visit "/pets"
