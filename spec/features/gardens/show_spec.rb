@@ -25,21 +25,12 @@ RSpec.describe 'garden show page' do
     expect(page).to have_content("#{@garden_1.name}")
   end
 
-  it 'has the names of all plants in garden' do
+  it 'has names of plants taking less than 100 days to harvest, no duplicates' do
       visit "/gardens/#{@garden_1.id}"
     expect(page).to have_content("#{@plant_1.name}")
     expect(page).to have_content("#{@plant_2.name}")
-    expect(page).to have_content("#{@plant_3.name}")
     expect(page).to have_content("#{@plant_4.name}")
-    expect(page).to_not have_content("#{@plant_5.name}")
+    expect(page).to_not have_content("#{@plant_3.name}")
   end
-
-  # it 'has names of plants taking less than 100 days to harvest, no duplicates' do
-  #     visit "/gardens/#{@garden_1.id}"
-  #   expect(page).to have_content("#{@plant_1.name}")
-  #   expect(page).to have_content("#{@plant_2.name}")
-  #   expect(page).to have_content("#{@plant_4.name}")
-  #   expect(page).to_not have_content("#{@plant_3.name}")
-  # end
 
 end
